@@ -1,0 +1,89 @@
+.TH MFG 1 "mfg-1.0"
+.SH NAME
+mfg \- maanoo's find and grep
+
+.SH SYNOPSIS
+.B mfg
+[-bpta] \fI\,FILE-TYPE\/\fR [-cn] [\fI\,NAME-PATTERN\/\fR] [-cnom] [\fI\,CONTENT-PATTERN\/\fR]
+
+.SH DESCRIPTION
+.B mfg
+Search for files in a directory hierarchy optionally matching a pattern and optionally print their content that match a pattern.
+
+FILE-TYPE: a(all), f(files), d(directories), e(executables), t(textfiles)
+
+NAME-PATTERN:
+.br
+- .
+.br
+- \fI\,TEXT\/\fR
+.br
+- [prefix|start|extension|end|fullname]: \fI\,TEXT\/\fR[,\fI\,TEXT\/\fR]
+
+CONTENT-PATTERN:
+.br
+- .
+.br
+- \fI\,TEXT\/\fR
+.br
+- [begin|start|end|]: \fI\,TEXT\/\fR
+.br
+- wrapped: \fI\,START-TEXT\/\fR \fI\,END-TEXT\/\fR
+.br
+- regex: <regex>
+
+.SH OPTIONS
+
+.SS "General options"
+
+.TP
+.BR \-b
+BFS search
+.TP
+.BR \-p
+No color output
+.TP
+.BR \-p
+Table output
+.TP
+.BR \-a
+Don't search hidden files and directories
+
+.SS "Name options"
+
+.TP
+.BR \-c
+Case sensitive file name pattern matching
+.TP
+.BR \-n
+Do not output the file names
+
+.SS "Content options"
+
+.TP
+.BR \-c
+Case sensitive content pattern matching
+.TP
+.BR \-n
+Do not output the matched content lines
+.TP
+.BR \-o
+Output only the matched content
+.TP
+.BR \-m
+Multiline content pattern matching
+
+.SH "EXIT STATUS"
+
+.TP
+.B 0
+Successful program execution.
+.TP
+.B 1
+Usage, syntax or configuration file error.
+.TP
+.B 2
+Operational error.
+
+.SH "SEE ALSO"
+Full documentation <https://github.com/MaanooAk/mfg>
