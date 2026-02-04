@@ -4,13 +4,13 @@ mfg \- maanoo's find and grep
 
 .SH SYNOPSIS
 .B mfg
-[-bpta] \fI\,FILE-TYPE\/\fR [-cn] [\fI\,NAME-PATTERN\/\fR] [-cnom] [\fI\,CONTENT-PATTERN\/\fR]
+[-bqpmta] \fI\,FILE-TYPE\/\fR [-ni] [\fI\,NAME-PATTERN\/\fR] [-nioma] [\fI\,CONTENT-PATTERN\/\fR]
 
 .SH DESCRIPTION
 .B mfg
 Search for files in a directory hierarchy optionally matching a pattern and optionally print their content that match a pattern.
 
-FILE-TYPE: a(all), f(files), d(directories), e(executables), t(textfiles)
+FILE-TYPE: a(all), f(files), d(directories), e(executables), t(textfiles), b(binary)
 
 NAME-PATTERN:
 .br
@@ -40,10 +40,16 @@ CONTENT-PATTERN:
 .BR \-b
 BFS search
 .TP
-.BR \-p
-No color output
+.BR \-q
+Output only the names of the files that the content pattern has matched
 .TP
 .BR \-p
+No color and no truncated output
+.TP
+.BR \-m
+Monochrome output
+.TP
+.BR \-t
 Table output
 .TP
 .BR \-a
@@ -72,6 +78,9 @@ Output only the matched content
 .TP
 .BR \-m
 Multiline content pattern matching
+.TP
+.BR \-a
+Output also lines around the matched content lines
 
 .SH "EXIT STATUS"
 

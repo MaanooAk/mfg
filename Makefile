@@ -2,10 +2,10 @@
 TARGET = mfg
 
 $(TARGET): mfg.c mfg.h help.c
-	cc -Wall -O3 $< -o $@
+	cc -Wall -O3 -luring $< -o $@
 
 %.h: %.c
-	cat $< | grep '^\w.* {$$' | sed 's/ {/;/' > $@
+	cat $< | grep '^\w.*) {$$' | sed 's/ {/;/' > $@
 
 help.c: mfg.1
 	man ./mfg.1 | head -n-1 | tail -n+7 | sed -e 's/^/"/' -e 's/$$/\\n"/' | (echo 'static const char* help = '; cat; echo ';') > $@
