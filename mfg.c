@@ -267,9 +267,7 @@ int paths_bfs() {
 	bfs_queue_end = bfs_queue_buffer;
 
 	if (paths_bfs_consume(".")) return 1;
-	while (1) {
-		if (paths_bfs_deque()) break;
-	}
+	while (!paths_bfs_deque());
 	return 0;
 }
 

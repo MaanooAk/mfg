@@ -4,9 +4,11 @@ maanoo's find and grep
 
 Search for files in a directory hierarchy optionally matching a pattern and optionally print their content that match a pattern.
 
-Implemented with `liburing`, `memmem` and `fts`.
+Supports pattern type selection, bfs file search, echo filename if greps, multicolor matches, handles matches in very long lines, builtin directory excludes.
 
-![Screenshot](TODO)
+Implemented with `liburing` and `memmem`.
+
+![Screenshot](https://private-user-images.githubusercontent.com/6997990/545290778-4276d67e-e942-466e-bb95-27c02a90609c.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzAyNTAwNzcsIm5iZiI6MTc3MDI0OTc3NywicGF0aCI6Ii82OTk3OTkwLzU0NTI5MDc3OC00Mjc2ZDY3ZS1lOTQyLTQ2NmUtYmI5NS0yN2MwMmE5MDYwOWMucG5nP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQVZDT0RZTFNBNTNQUUs0WkElMkYyMDI2MDIwNSUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNjAyMDVUMDAwMjU3WiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9MDQ2Yzc3M2ZiMTk2MjYzNjI1YTBmMzhlNzM0Y2JjZmQ4Mzc2OTZmYjFhNGM5MWU0MTEzYzA3YTU1NTllODE3ZCZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QifQ.Ptyt6FlyhKARbQGzhQCEa8BGJcJTWMdcqT4OvmFFKM0)
 
 ## Usage
 
@@ -16,7 +18,8 @@ Implemented with `liburing`, `memmem` and `fts`.
        mfg [-bqpmta] FILE-TYPE [-ni] [NAME-PATTERN] [-nioma] [CONTENT-PATTERN]
 
 DESCRIPTION
-       mfg Search for files in a directory hierarchy optionally matching a pattern and optionally print their content that match a pattern.
+       mfg Search for files in a directory hierarchy optionally matching a pattern and
+       optionally print their content that match a pattern.
 
        FILE-TYPE: a(all), f(files), d(directories), e(executables), t(textfiles), b(binary)
 
