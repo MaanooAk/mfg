@@ -267,7 +267,7 @@ int paths_bfs() {
 	bfs_queue_end = bfs_queue_buffer;
 
 	if (paths_bfs_consume(".")) return 1;
-	while (!paths_bfs_deque());
+	while (!paths_bfs_deque()) {}
 	return 0;
 }
 
@@ -460,7 +460,7 @@ int init_loading() {
 	return 0;
 }
 
-void loading_sumbit_file(file_entry *file) {
+void loading_submit_file(file_entry *file) {
 
 	file->iov.iov_base = file->buffer.start;
 	file->iov.iov_len = file->buffer.capacity;
@@ -518,7 +518,7 @@ file_entry *handle_content(string path, string name, filemode mode, filesize siz
 	file->size = size;
 	file->buffer = file->fixed_buffer;
 
-	loading_sumbit_file(file);
+	loading_submit_file(file);
 	return file;
 }
 
@@ -539,7 +539,7 @@ file_entry *handle_content_overflow(file_entry *file) {
 	file->ready = 0;
 	file->buffer = buffer;
 
-	loading_sumbit_file(file);
+	loading_submit_file(file);
 	return file;
 }
 
@@ -887,14 +887,16 @@ char match_pattern(pattern *p, char *text_start, char *text_end) {
 			if (!match) return 0;
 			p->match_start = match + 1;
 			p->match_end = p->match_start + P->len;
+			return 1;
 		}
 		PATTERN_CAST(end) {
 
 			char *match = memmem(text_start, text_len, P->text, P->len + 1);
-			if (!match) return 0;
-			p->match_start = match;
-			p->match_end = p->match_start + P->len;
-
+			if (match) {
+				p->match_start = match;
+				p->match_end = p->match_start + P->len;
+				return 1;
+			}
 			if (!memcmp(text_end - P->len, P->text, P->len)) {
 				p->match_start = text_end - P->len;
 				p->match_end = text_end;
@@ -1139,7 +1141,7 @@ int handle_args(int argc, char *argv[]) {
 					p->as.wrap.end.arg = argv[argi++];
 					break;
 				case T_regex:
-					p->as.start.arg = argv[argi++];
+					p->as.regex.arg = argv[argi++];
 					break;
 				}
 			} else {
