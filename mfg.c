@@ -633,8 +633,9 @@ file_entry *handle_content_result() {
 
 char check_binary(char *buffer, filesize len) {
 
-	if (check_binary1(buffer, min(len, BINARY_FAST_CHECK_LEN))) return 1;
-	if (check_binary2(buffer, min(len, BINARY_CHECK_LEN))) return 1;
+	// if (check_binary1(buffer, min(len, BINARY_FAST_CHECK_LEN))) return 1;
+	// if (check_binary2(buffer, min(len, BINARY_CHECK_LEN))) return 1;
+	if (check_binary1(buffer, min(len, BINARY_CHECK_LEN))) return 1;
 	return 0;
 }
 
