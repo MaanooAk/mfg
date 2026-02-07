@@ -102,6 +102,10 @@ typedef struct {
 
 // === state
 
+char **roots = 0;
+int roots_count = 0;
+int roots_index = 0;
+
 char *bfs_queue_buffer;
 size_t bfs_queue_capacity;
 char *bfs_queue_start;
@@ -208,10 +212,14 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (isatty(STDIN_FILENO)) {
-		if (!option_bfs) {
-			if (paths_traverse()) return ERROR_INTERNAL;
+		if (!roots_count) {
+			if (paths_handle()) return ERROR_INTERNAL;
 		} else {
-			if (paths_bfs()) return ERROR_INTERNAL;
+			for_each(i, roots_count) {
+				roots_index = i;
+				if (change_dir(roots[i])) continue;
+				if (paths_handle()) return ERROR_INTERNAL;
+			}
 		}
 	} else {
 		if (paths_read()) return ERROR_INTERNAL;
@@ -226,6 +234,24 @@ int main(int argc, char *argv[]) {
 }
 
 // === paths
+
+int paths_handle() {
+	if (!option_bfs) {
+		if (paths_traverse()) return 1;
+	} else {
+		if (paths_bfs()) return 1;
+	}
+	return 0;
+}
+
+int change_dir(char *path) {
+	if (chdir(path)) {
+		errors_count += 1;
+		printf_error_verbose("Failed to find '%s'", path);
+		return 1;
+	}
+	return 0;
+}
 
 int paths_traverse() {
 
@@ -526,10 +552,16 @@ file_entry *handle_content(string path, string name, filemode mode, filesize siz
 	// file_entry create
 	file->ready = 0;
 	file->fd = fd;
-	strcpy(file->path, path);
 	file->mode = mode;
 	file->size = size;
 	file->buffer = file->fixed_buffer;
+
+	if (!roots_count) {
+		strcpy(file->path, path);
+	} else {
+		const char *sep = roots[roots_index][strlen(roots[roots_index]) - 1] == '/' ? "" : "/";
+		sprintf(file->path, "%s%s%s", roots[roots_index], sep, path);
+	}
 
 	loading_submit_file(file);
 	return file;
@@ -738,7 +770,12 @@ inline void print_match(file_entry *file) {
 	printf_output("%s", file->path);
 }
 inline void print_match_path(string path) {
-	printf_output("%s", path);
+	if (!roots_count) {
+		printf_output("%s", path);
+	} else {
+		const char *sep = roots[roots_index][strlen(roots[roots_index]) - 1] == '/' ? "" : "/";
+		printf_output("%s%s%s", roots[roots_index], sep, path);
+	}
 }
 
 void print_search_match(file_entry *file, filesize line, char *result_start, char *result_end, char *line_start, char *line_end, int pi) {
@@ -1058,10 +1095,18 @@ int handle_args(int argc, char *argv[]) {
 		OPTION += 1;            \
 		break;
 
+#define HANDLE_END                 \
+	if (str_equals(arg, "--")) {   \
+		roots = argv + argi;       \
+		roots_count = argc - argi; \
+		return 0;                  \
+	}
+
 	int argi = 1;
 
 	while (argi < argc) {
 		string arg = argv[argi++];
+		HANDLE_END
 
 		if (!str_is_option(arg)) {
 			if (handle_arg_keyword("file type", &option_file_type,
@@ -1088,6 +1133,7 @@ int handle_args(int argc, char *argv[]) {
 
 	while (argi < argc) {
 		string arg = argv[argi++];
+		HANDLE_END
 
 		if (!str_is_option(arg)) {
 			if (str_equals(arg, ".")) {
@@ -1119,12 +1165,15 @@ int handle_args(int argc, char *argv[]) {
 
 	while (argi < argc) {
 		string arg = argv[argi++];
+		HANDLE_END
 
 		if (!str_is_option(arg)) {
 			pattern *p = content_patterns + content_patterns_len++;
 			p->index = content_patterns_len - 1;
 
-			if (str_equals(arg, "")) {
+			if (str_equals(arg, "--")) {
+				break;
+			} else if (str_equals(arg, "")) {
 				p->type = 0;
 
 			} else if (str_equals(arg, ".")) {

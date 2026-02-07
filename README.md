@@ -16,6 +16,7 @@ Implemented with `liburing` and `memmem`.
 
 ```
        mfg [-bqpmtav] FILE-TYPE [-ni] [NAME-PATTERN] [-nioma] [CONTENT-PATTERN]
+       mfg [-bqpmtav] FILE-TYPE [-ni] [NAME-PATTERN] [-nioma] [CONTENT-PATTERN] -- ROOT[,ROOT]
 
 DESCRIPTION
        mfg Search for files in a directory hierarchy optionally matching a pattern and
