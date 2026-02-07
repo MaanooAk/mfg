@@ -4,7 +4,7 @@ mfg \- maanoo's find and grep
 
 .SH SYNOPSIS
 .B mfg
-[-bqpmta] \fI\,FILE-TYPE\/\fR [-ni] [\fI\,NAME-PATTERN\/\fR] [-nioma] [\fI\,CONTENT-PATTERN\/\fR]
+[-bqpmtav] \fI\,FILE-TYPE\/\fR [-ni] [\fI\,NAME-PATTERN\/\fR] [-nioma] [\fI\,CONTENT-PATTERN\/\fR]
 
 .SH DESCRIPTION
 .B mfg
@@ -41,10 +41,10 @@ CONTENT-PATTERN:
 BFS search
 .TP
 .BR \-q
-Output only the names of the files that the content pattern has matched
+Query, output only the names of the files that the content pattern has matched
 .TP
 .BR \-p
-No color and no truncated output
+Plain, no color and no truncated output
 .TP
 .BR \-m
 Monochrome output
@@ -53,7 +53,10 @@ Monochrome output
 Table output
 .TP
 .BR \-a
-Don't search hidden files and directories
+All no, don't search hidden files and directories
+.TP
+.BR \-v
+Verbose, print all errors
 
 .SS "Name options"
 
@@ -80,7 +83,7 @@ Output only the matched content
 Multiline content pattern matching
 .TP
 .BR \-a
-Output also lines around the matched content lines
+Around, output also lines around the matched content lines
 
 .SH "EXIT STATUS"
 

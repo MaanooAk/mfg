@@ -15,7 +15,7 @@ Implemented with `liburing` and `memmem`.
 ### Options
 
 ```
-       mfg [-bqpmta] FILE-TYPE [-ni] [NAME-PATTERN] [-nioma] [CONTENT-PATTERN]
+       mfg [-bqpmtav] FILE-TYPE [-ni] [NAME-PATTERN] [-nioma] [CONTENT-PATTERN]
 
 DESCRIPTION
        mfg Search for files in a directory hierarchy optionally matching a pattern and
@@ -38,22 +38,23 @@ DESCRIPTION
 OPTIONS
    General options
        -b     BFS search
-       -q     Output only the names of the files that the content pattern has matched
-       -p     No color and no truncated output
+       -q     Query, output only the names of the files that the content pattern has matched
+       -p     Plain, no color and no truncated output
        -m     Monochrome output
        -t     Table output
-       -a     Don't search hidden files and directories
+       -a     All no, don't search hidden files and directories
+       -v     Verbose, print all errors
 
    Name options
+       -c     Case sensitive file name pattern matching
        -n     Do not output the file names
-       -i     Case sensitive file name pattern matching
 
    Content options
+       -c     Case sensitive content pattern matching
        -n     Do not output the matched content lines
-       -i     Case sensitive content pattern matching
        -o     Output only the matched content
        -m     Multiline content pattern matching
-       -a     Output also lines around the matched content lines
+       -a     Around, output also lines around the matched content lines
 
 EXIT STATUS
        0      Successful program execution.

@@ -115,6 +115,8 @@ struct io_uring ring;
 pattern content_patterns[MAX_CONTENT_PATTERNS];
 int content_patterns_len = 0;
 
+int errors_count = 0;
+
 // === utils
 
 #include "help.c"
@@ -136,6 +138,8 @@ int content_patterns_len = 0;
 
 #define printf_output(fmt, ...) fprintf(stdout, fmt "\n", ##__VA_ARGS__);
 #define printf_error(fmt, ...) fprintf(stderr, "mfg: " fmt "\n", ##__VA_ARGS__);
+#define printf_error_verbose(fmt, ...) \
+	if (option_verbose) fprintf(stderr, "mfg: " fmt "\n", ##__VA_ARGS__);
 
 #define ERROR_INPUT 1
 #define ERROR_INTERNAL 2
@@ -165,6 +169,7 @@ check option_plain = 0;
 check option_monochrome = 0;
 check option_table = 0;
 check option_unhidden = 0;
+check option_verbose = 0;
 char option_file_type = 'a';
 string possible_option_file_type = "afdetb";
 string mappings_option_file_type = "afdetb";
@@ -213,6 +218,10 @@ int main(int argc, char *argv[]) {
 	}
 	handle_last_content_loaded();
 
+	if (errors_count) {
+		printf_error("%d access errors occurred", errors_count);
+	}
+
 	return 0;
 }
 
@@ -250,7 +259,8 @@ int paths_traverse() {
 			break;
 		case FTS_ERR:
 		case FTS_DNR:
-			printf_error("Error reading %s", path);
+			errors_count += 1;
+			printf_error_verbose("Error reading '%s'", path);
 		default:
 		}
 	}
@@ -507,7 +517,10 @@ void handle_last_content_loaded() {
 file_entry *handle_content(string path, string name, filemode mode, filesize size) {
 
 	int fd = open(path, O_RDONLY);
-	if (fd < 0) return 0;
+	if (fd < 0) {
+		errors_count += 1;
+		return 0;
+	}
 
 	file_entry *file = get_ready_file_entry();
 	// file_entry create
@@ -1065,6 +1078,7 @@ int handle_args(int argc, char *argv[]) {
 				OPTION_CHECK('m', option_monochrome)
 				OPTION_CHECK('t', option_table)
 				OPTION_CHECK('a', option_unhidden)
+				OPTION_CHECK('v', option_verbose)
 			default:
 				printf_error("Unknown general option '-%c'", *c);
 				return 1;
