@@ -784,6 +784,8 @@ void print_search_match(file_entry *file, filesize line, char *result_start, cha
 	int print_limit = DEFAULT_PRINT_LIMIT;
 	char line_pre[print_limit + 3], line_post[print_limit + 3];
 
+	if (result_end > line_end) result_end = line_end;
+
 	int pattern_len = (result_end) - (result_start);
 	int line_pre_len = (result_start) - (line_start);
 	int line_post_len = (line_end) - (result_end);
